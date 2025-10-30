@@ -27,7 +27,12 @@ Start your code below 👇
 // You'll fetch data from your selected API and display it on the page
 const output = document.getElementById('output');
 const foxBtn = document.getElementById('foxBtn');
+const catFactBtn = document.getElementById('catFactBtn');
+const meowFactBtn = document.getElementById('meowFactBtn');
+const yesNoBtn = document.getElementById('yesNoBtn');
+const uselessFactBtn = document.getElementById('uselessFactBtn');
 
+// Fox API
 const foxFacts = [
 	"Foxes have whiskers on their legs as well as their faces, helping them to navigate.",
 	"A group of foxes is called a skulk or leash.",
@@ -40,17 +45,14 @@ const foxFacts = [
 	"Foxes have vertical pupils, similar to cats, which help them see in the dark.",
 	"Baby foxes are called kits, pups, or cubs."
 ];
-
 function getRandomFact() {
 	return foxFacts[Math.floor(Math.random() * foxFacts.length)];
 }
-
 function fetchFox() {
 	output.innerText = 'Loading...';
 	fetch('https://randomfox.ca/floof/')
 		.then(response => response.json())
 		.then(data => {
-			// Clear output and build elements dynamically
 			output.innerHTML = '';
 			const title = document.createElement('h2');
 			title.innerText = 'Here\'s a random fox!';
@@ -74,7 +76,96 @@ function fetchFox() {
 		});
 }
 
+// Cat Fact API
+function fetchCatFact() {
+	output.innerText = 'Loading...';
+	fetch('https://catfact.ninja/fact')
+		.then(response => response.json())
+		.then(data => {
+			output.innerHTML = '';
+			const title = document.createElement('h2');
+			title.innerText = 'Random Cat Fact';
+			const fact = document.createElement('p');
+			fact.innerText = data.fact;
+			output.appendChild(title);
+			output.appendChild(fact);
+		})
+		.catch(error => {
+			output.innerText = 'Failed to load cat fact.';
+		});
+}
+
+// Meow Facts API
+function fetchMeowFact() {
+	output.innerText = 'Loading...';
+	fetch('https://meowfacts.herokuapp.com/')
+		.then(response => response.json())
+		.then(data => {
+			output.innerHTML = '';
+			const title = document.createElement('h2');
+			title.innerText = 'Random Meow Fact';
+			const fact = document.createElement('p');
+			fact.innerText = Array.isArray(data.data) ? data.data[0] : data.data;
+			output.appendChild(title);
+			output.appendChild(fact);
+		})
+		.catch(error => {
+			output.innerText = 'Failed to load meow fact.';
+		});
+}
+
+// Yes/No API
+function fetchYesNo() {
+	output.innerText = 'Loading...';
+	fetch('https://yesno.wtf/api')
+		.then(response => response.json())
+		.then(data => {
+			output.innerHTML = '';
+			const title = document.createElement('h2');
+			title.innerText = 'Yes/No Answer';
+			const answer = document.createElement('p');
+			answer.innerText = data.answer.charAt(0).toUpperCase() + data.answer.slice(1);
+			if (data.image) {
+				const img = document.createElement('img');
+				img.setAttribute('src', data.image);
+				img.setAttribute('alt', data.answer);
+				img.style.maxWidth = '100%';
+				img.style.borderRadius = '8px';
+				output.appendChild(img);
+			}
+			output.appendChild(title);
+			output.appendChild(answer);
+		})
+		.catch(error => {
+			output.innerText = 'Failed to load yes/no answer.';
+		});
+}
+
+// Useless Facts API
+function fetchUselessFact() {
+	output.innerText = 'Loading...';
+	fetch('https://uselessfacts.jsph.pl/random.json?language=en')
+		.then(response => response.json())
+		.then(data => {
+			output.innerHTML = '';
+			const title = document.createElement('h2');
+			title.innerText = 'Random Useless Fact';
+			const fact = document.createElement('p');
+			fact.innerText = data.text;
+			output.appendChild(title);
+			output.appendChild(fact);
+		})
+		.catch(error => {
+			output.innerText = 'Failed to load useless fact.';
+		});
+}
+
 foxBtn.addEventListener('click', fetchFox);
+catFactBtn.addEventListener('click', fetchCatFact);
+meowFactBtn.addEventListener('click', fetchMeowFact);
+yesNoBtn.addEventListener('click', fetchYesNo);
+uselessFactBtn.addEventListener('click', fetchUselessFact);
+
 // Show a fox on page load
 fetchFox();
 
